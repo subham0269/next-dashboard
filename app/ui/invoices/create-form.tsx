@@ -1,3 +1,4 @@
+'use client';
 import { CustomerField } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
@@ -8,10 +9,29 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createInvoice } from '@/app/lib/actions';
+import { useState } from 'react';
+import { setMaxListeners } from 'stream';
+import Image from 'next/image';
+import Loading from '@/public/loading.svg';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
+  const [isLoading, setLoading] = useState(false);
+  
+  const handleSubmit =async (event: any) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const formdata = new FormData(event.target);
+      await createInvoice(formdata);
+    } catch (error) {
+      console.log('create-form error: ', error)
+    } finally {
+      setLoading(false);
+    }
+  }
+  
   return (
-    <form action={createInvoice}>
+    <form action='/createInvoice' onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -106,7 +126,16 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create Invoice</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <div className="flex items-center">
+              <span className="mr-2">Creating Invoice...</span>
+              <Image src={Loading} width={20} alt='loading'/>
+            </div>
+          ) : (
+            'Create Invoice'
+          )}
+        </Button>
       </div>
     </form>
   );
