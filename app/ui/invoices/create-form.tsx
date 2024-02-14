@@ -17,8 +17,8 @@ import Loading from '@/public/loading.svg';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const [isLoading, setLoading] = useState(false);
-  const initialState = {message: null, errors: {}};
-  const [state, dispatch] = useFormState(createInvoice, initialState);
+  // const initialState = {message: null, errors: {}};
+  // const [state, dispatch] = useFormState(createInvoice, initialState);
   
   const handleSubmit =async (event: any) => {
     event.preventDefault();
@@ -34,7 +34,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
   }
   
   return (
-    <form action='/dispatch' onSubmit={handleSubmit}>
+    <form action='/createInvoice' onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
