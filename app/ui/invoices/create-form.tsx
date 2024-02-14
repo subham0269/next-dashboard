@@ -10,12 +10,15 @@ import {
 import { Button } from '@/app/ui/button';
 import { createInvoice } from '@/app/lib/actions';
 import { useState } from 'react';
-import { setMaxListeners } from 'stream';
+import { useFormState } from 'react-dom';
+
 import Image from 'next/image';
 import Loading from '@/public/loading.svg';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const [isLoading, setLoading] = useState(false);
+  const initialState = {message: null, errors: {}};
+  const [state, dispatch] = useFormState(createInvoice, initialState);
   
   const handleSubmit =async (event: any) => {
     event.preventDefault();
@@ -31,7 +34,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
   }
   
   return (
-    <form action='/createInvoice' onSubmit={handleSubmit}>
+    <form action='/dispatch' onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
